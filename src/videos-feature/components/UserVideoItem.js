@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Card from '../../shared/components/UIElements/Card';
 import Button from '../../shared/components/FormElements/Button';
 import Modal from '../../shared/components/UIElements/Modal';
+import VideoPlayer from '../../shared/components/UIElements/VideoPlayer';
 import './VideoItem.css';
 
 const UserVideoItem = (props) => {
@@ -37,7 +38,7 @@ const UserVideoItem = (props) => {
         footer={<Button onClick={closeVideoHandler}>CLOSE</Button>}
       >
         <div className="map-container">
-          <h2>The Video!!</h2>
+          <VideoPlayer videoUrl={props.video} />
         </div>
       </Modal>
       <Modal
@@ -56,7 +57,7 @@ const UserVideoItem = (props) => {
           </React.Fragment>
         }
       >
-        <p>Do you want to process and delete this place</p>
+        <p>Do you want to process and delete this video</p>
       </Modal>
       <li className="video-item">
         <Card className="video-item__content">

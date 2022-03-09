@@ -50,6 +50,7 @@
 
 .map-container {
   height: 20rem;
+  position: relative;
   width: 100%;
 }
 

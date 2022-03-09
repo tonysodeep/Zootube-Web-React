@@ -5,6 +5,7 @@ import Button from '../../shared/components/FormElements/Button';
 import Modal from '../../shared/components/UIElements/Modal';
 import './VideoItem.css';
 import { AuthContext } from '../../shared/context/auth-context';
+import VideoPlayer from '../../shared/components/UIElements/VideoPlayer';
 
 const VideoItem = (props) => {
   const auth = useContext(AuthContext);
@@ -25,7 +26,7 @@ const VideoItem = (props) => {
         footer={<Button onClick={closeVideoHandler}>CLOSE</Button>}
       >
         <div className="map-container">
-          <h2>The Video!!</h2>
+          <VideoPlayer videoUrl={props.video} />
         </div>
       </Modal>
       <li className="video-item">
