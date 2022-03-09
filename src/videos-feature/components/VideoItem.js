@@ -15,6 +15,7 @@ const VideoItem = (props) => {
   const openVideoHandler = () => setShowVideo(true);
 
   const closeVideoHandler = () => setShowVideo(false);
+
   return (
     <React.Fragment>
       <Modal
@@ -43,7 +44,7 @@ const VideoItem = (props) => {
             <Button
               to={auth.isLoggedIn ? `/${props.creatorId}/videos` : '/auth'}
             >
-              {props.userName}
+              {props.creatorName}
             </Button>
             <Button inverse onClick={openVideoHandler}>
               Watch Video
