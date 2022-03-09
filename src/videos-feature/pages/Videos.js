@@ -15,7 +15,7 @@ const DUMMY_VIDEO = [
     userName:'tonysodeep'
   },
   {
-    id: 'v1',
+    id: 'v2',
     title: 'Music video',
     description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry.`,
     resources: {
@@ -24,7 +24,7 @@ const DUMMY_VIDEO = [
       videoUrl: 'https://www.youtube.com/watch?v=m8mJIiMdtks',
     },
     creator: 'u2',
-    userName:'tonysodeep'
+    userName:'tonysodeep2'
   },
 ];
 

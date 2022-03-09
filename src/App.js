@@ -23,7 +23,7 @@ const App = () => {
           <Route path="/:userId/videos" exact>
             <UserVideo />
           </Route>
-          <Route path="/places/new" exact>
+          <Route path="/video/new" exact>
             <NewVideo />
           </Route>
           <Redirect to="/" />

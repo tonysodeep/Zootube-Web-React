@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from '../../shared/components/FormElements/Button';
 
 import Card from '../../shared/components/UIElements/Card';
 import UserVideoItem from './UserVideoItem';
@@ -10,8 +11,8 @@ const UserVideoList = (props) => {
     return (
       <div className="video-list center">
         <Card>
-          <h2>No places found. Maybe create one?</h2>
-          <button>Share Place</button>
+          <h2>No video found. Maybe create one?</h2>
+          <Button to="/video/new">Share Video</Button>
         </Card>
       </div>
     );

@@ -15,7 +15,7 @@ const NavLinks = (props) => {
         <NavLink to="/u1/videos">MY VIDEO</NavLink>
       </li>
       <li>
-        <NavLink to="/places/new">ADD VIDEO</NavLink>
+        <NavLink to="/video/new">ADD VIDEO</NavLink>
       </li>
       <li>
         <NavLink to="/auth">AUTHENTICATE</NavLink>
