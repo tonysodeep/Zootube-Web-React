@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 import Card from '../../shared/components/UIElements/Card';
 import Button from '../../shared/components/FormElements/Button';
 import Modal from '../../shared/components/UIElements/Modal';
 import './VideoItem.css';
+import { AuthContext } from '../../shared/context/auth-context';
 
 const VideoItem = (props) => {
+  const auth = useContext(AuthContext);
+
   const [showVideo, setShowVideo] = useState(false);
 
   const openVideoHandler = () => setShowVideo(true);
@@ -36,7 +39,11 @@ const VideoItem = (props) => {
             <p>{props.description}</p>
           </div>
           <div className="video-item__actions">
-            <Button to={`/${props.creatorId}/videos`}>{props.userName}</Button>
+            <Button
+              to={auth.isLoggedIn ? `/${props.creatorId}/videos` : '/auth'}
+            >
+              {props.userName}
+            </Button>
             <Button inverse onClick={openVideoHandler}>
               Watch Video
             </Button>
