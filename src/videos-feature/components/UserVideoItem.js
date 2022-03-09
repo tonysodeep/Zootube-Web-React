@@ -6,13 +6,13 @@ import Modal from '../../shared/components/UIElements/Modal';
 import './VideoItem.css';
 
 const UserVideoItem = (props) => {
-  const [showVideo, setShowMap] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
-  const openVideoHandler = () => setShowMap(true);
+  const openVideoHandler = () => setShowVideo(true);
 
-  const closeVideoHandler = () => setShowMap(false);
+  const closeVideoHandler = () => setShowVideo(false);
 
   const showDeleteWaringHandler = () => {
     setShowConfirmModal(true);
