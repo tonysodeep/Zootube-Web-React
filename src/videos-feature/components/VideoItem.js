@@ -42,7 +42,7 @@ const VideoItem = (props) => {
           </div>
           <div className="video-item__actions">
             <Button
-              to={auth.isLoggedIn ? `/${props.creatorId}/videos` : '/auth'}
+              to={auth.isLoggedIn ? `/videos/${props.creatorId}` : '/auth'}
             >
               {props.creatorName}
             </Button>

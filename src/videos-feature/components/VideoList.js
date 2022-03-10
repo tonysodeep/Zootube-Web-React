@@ -25,6 +25,7 @@ const VideoList = (props) => {
           video={video.resource.videoUrl}
           description={video.description}
           creatorName={video.creator.username}
+          creatorId = {video.creator.id}
         />
       ))}
     </ul>

@@ -37,7 +37,7 @@ const App = () => {
         <Route path="/" exact>
           <Videos />
         </Route>
-        <Route path="/:userId/videos" exact>
+        <Route path="/videos/:userId" exact>
           <UserVideo />
         </Route>
         <Route path="/video/new" exact>
