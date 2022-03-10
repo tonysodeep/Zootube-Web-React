@@ -1,35 +1,37 @@
-import React from 'react';
-import VideoList from '../components/VideoList';
+import React, { useEffect, useState } from 'react';
 
-const DUMMY_VIDEO = [
-  {
-    id: 'v1',
-    title: 'Cooking show',
-    description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry.`,
-    resources: {
-      thumbnailUrl:
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Notre_dame_saigon.jpg/440px-Notre_dame_saigon.jpg',
-      videoUrl: 'https://www.youtube.com/watch?v=m8mJIiMdtks',
-    },
-    creator: 'u1',
-    userName:'tonysodeep'
-  },
-  {
-    id: 'v2',
-    title: 'Music video',
-    description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry.`,
-    resources: {
-      thumbnailUrl:
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Notre_dame_saigon.jpg/440px-Notre_dame_saigon.jpg',
-      videoUrl: 'https://www.youtube.com/watch?v=m8mJIiMdtks',
-    },
-    creator: 'u2',
-    userName:'tonysodeep2'
-  },
-];
+import VideoList from '../components/VideoList';
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
+import { useHttpClient } from '../../shared/hooks/http-hook';
 
 const Videos = () => {
-  return <VideoList items={DUMMY_VIDEO} />;
+  const [loadedVideos, setLoadedVideos] = useState();
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        const responseData = await sendRequest(
+          'http://localhost:5069/api/videos'
+        );
+        setLoadedVideos(responseData.videos);
+      } catch (err) {}
+    };
+    fetchVideos();
+  }, [sendRequest]);
+
+  return (
+    <React.Fragment>
+      <ErrorModal error={error} onClear={clearError} />
+      {isLoading && (
+        <div className="center">
+          <LoadingSpinner />
+        </div>
+      )}
+      {!isLoading && loadedVideos && <VideoList items={loadedVideos} />}
+    </React.Fragment>
+  );
 };
 
 export default Videos;

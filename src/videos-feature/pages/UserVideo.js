@@ -1,39 +1,46 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 
+import { useHttpClient } from '../../shared/hooks/http-hook';
 import UserVideoList from '../components/UserVideoList';
 
-const DUMMY_VIDEO = [
-  {
-    id: 'v1',
-    title: 'Cooking show',
-    description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry.`,
-    resources: {
-      thumbnailUrl:
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Notre_dame_saigon.jpg/440px-Notre_dame_saigon.jpg',
-      videoUrl: 'https://www.youtube.com/watch?v=m8mJIiMdtks',
-    },
-    creator: 'u1',
-    userName: 'tonysodeep',
-  },
-  {
-    id: 'v1',
-    title: 'Music video',
-    description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry.`,
-    resources: {
-      thumbnailUrl:
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Notre_dame_saigon.jpg/440px-Notre_dame_saigon.jpg',
-      videoUrl: 'https://www.youtube.com/watch?v=m8mJIiMdtks',
-    },
-    creator: 'u2',
-    userName: 'tonysodeep',
-  },
-];
-
 const UserVideo = () => {
+  const [userLoadedVideos, setUserLoadedVideos] = useState();
+  const [userInfo, setUserInfo] = useState();
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
   const userId = useParams().userId;
-  const loadedVideos = DUMMY_VIDEO.filter((video) => video.creator === userId);
-  return <UserVideoList items={loadedVideos} />;
+
+  useEffect(() => {
+    const fetchUserVideos = async () => {
+      try {
+        const responseData = await sendRequest(
+          `http://localhost:5069/api/videos/user/${userId}`
+        );
+        console.log('responseData', responseData);
+        const { name, imageUrl } = responseData;
+        setUserInfo({ name, imageUrl });
+        setUserLoadedVideos(responseData.userVideos);
+      } catch (err) {}
+    };
+    fetchUserVideos();
+  }, [sendRequest, userId]);
+
+  return (
+    <React.Fragment>
+      <ErrorModal error={error} onClear={clearError} />
+      {isLoading && (
+        <div className="center">
+          <LoadingSpinner />
+        </div>
+      )}
+      {!isLoading && userLoadedVideos && userInfo && (
+        <UserVideoList items={userLoadedVideos} userInfo={userInfo} />
+      )}
+    </React.Fragment>
+  );
 };
 
 export default UserVideo;

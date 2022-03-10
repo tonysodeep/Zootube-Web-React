@@ -19,12 +19,16 @@ import './App.css';
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const login = useCallback(() => {
+  const [userId, setUserId] = useState(false);
+
+  const login = useCallback((uid) => {
     setIsLoggedIn(true);
+    setUserId(uid);
   }, []);
 
   const logout = useCallback(() => {
     setIsLoggedIn(false);
+    setUserId(null);
   }, []);
   let routes;
   if (isLoggedIn) {
@@ -33,7 +37,7 @@ const App = () => {
         <Route path="/" exact>
           <Videos />
         </Route>
-        <Route path="/:userId/videos" exact>
+        <Route path="/videos/:userId" exact>
           <UserVideo />
         </Route>
         <Route path="/video/new" exact>
@@ -60,7 +64,12 @@ const App = () => {
   }
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn: isLoggedIn, login: login, logout: logout }}
+      value={{
+        isLoggedIn: isLoggedIn,
+        userId: userId,
+        login: login,
+        logout: logout,
+      }}
     >
       <Router>
         <MainNavigation />
