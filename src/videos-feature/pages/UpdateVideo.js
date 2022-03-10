@@ -1,46 +1,33 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import Button from '../../shared/components/FormElements/Button';
 import Input from '../../shared/components/FormElements/Input';
 import Card from '../../shared/components/UIElements/Card';
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import {
   VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
 } from '../../shared/utils/validators';
 import { useForm } from '../../shared/hooks/form-hook';
-import './VideoForm.css';
 
-const DUMMY_VIDEO = [
-  {
-    id: 'v1',
-    title: 'Cooking show',
-    description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry.`,
-    resources: {
-      thumbnailUrl:
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Notre_dame_saigon.jpg/440px-Notre_dame_saigon.jpg',
-      videoUrl: 'https://www.youtube.com/watch?v=m8mJIiMdtks',
-    },
-    creator: 'u1',
-    userName: 'tonysodeep',
-  },
-  {
-    id: 'v2',
-    title: 'Music video',
-    description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry.`,
-    resources: {
-      thumbnailUrl:
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Notre_dame_saigon.jpg/440px-Notre_dame_saigon.jpg',
-      videoUrl: 'https://www.youtube.com/watch?v=m8mJIiMdtks',
-    },
-    creator: 'u2',
-    userName: 'tonysodeep2',
-  },
-];
+import { useHttpClient } from '../../shared/hooks/http-hook';
+
+import './VideoForm.css';
+import { useHistory } from 'react-router-dom';
+import { AuthContext } from '../../shared/context/auth-context';
+
 const UpdateVideo = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const auth = useContext(AuthContext);
+
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
+  const [loadedVideo, setLoadedVideo] = useState();
 
   const videoId = useParams().videoId;
+
+  const history = useHistory();
 
   const [formState, inputHandler, setFormData] = useForm(
     {
@@ -56,34 +43,58 @@ const UpdateVideo = () => {
     false
   );
 
-  const identifiedVideo = DUMMY_VIDEO.find((p) => p.id === videoId);
-
   useEffect(() => {
-    if (identifiedVideo) {
-      setFormData(
-        {
-          title: {
-            value: identifiedVideo.title,
-            isValid: true,
+    const fetchVideo = async () => {
+      try {
+        const responseData = await sendRequest(
+          `http://localhost:5069/api/videos/${videoId}`
+        );
+        setLoadedVideo(responseData.video);
+        setFormData(
+          {
+            title: {
+              value: responseData.video.title,
+              isValid: true,
+            },
+            description: {
+              value: responseData.video.description,
+              isValid: true,
+            },
           },
-          description: {
-            value: identifiedVideo.description,
-            isValid: true,
-          },
-        },
-        true
-      );
-    }
+          true
+        );
+      } catch (err) {}
+    };
+    fetchVideo();
+  }, [sendRequest, videoId, setFormData]);
 
-    setIsLoading(false);
-  }, [setFormData, identifiedVideo]);
-
-  const videoUpdateSubmitHandler = (event) => {
+  const videoUpdateSubmitHandler = async (event) => {
     event.preventDefault();
-    console.log(formState.inputs);
+    try {
+      await sendRequest(
+        `http://localhost:5069/api/videos/${videoId}`,
+        'PATCH',
+        JSON.stringify({
+          title: formState.inputs.title.value,
+          description: formState.inputs.description.value,
+        }),
+        {
+          'Content-Type': 'application/json',
+        }
+      );
+      history.push(`/videos/${auth.userId}`);
+    } catch (err) {}
   };
 
-  if (!identifiedVideo) {
+  if (isLoading) {
+    return (
+      <div className="center">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
+  if (!loadedVideo && !error) {
     return (
       <div className="center">
         <Card>
@@ -93,41 +104,38 @@ const UpdateVideo = () => {
     );
   }
 
-  if (isLoading) {
-    return (
-      <div>
-        <h2>Loading...</h2>
-      </div>
-    );
-  }
-
   return (
-    <form className="video-form" onSubmit={videoUpdateSubmitHandler}>
-      <Input
-        id="title"
-        element="input"
-        type="text"
-        label="Title"
-        validators={[VALIDATOR_REQUIRE()]}
-        errorText="Please enter a valid title"
-        onInput={inputHandler}
-        initialValue={formState.inputs.title.value}
-        initialValid={formState.inputs.title.isValid}
-      />
-      <Input
-        id="description"
-        element="textarea"
-        label="Description"
-        validators={[VALIDATOR_MINLENGTH(5)]}
-        errorText="Please enter a valid description (min. 5 characters)."
-        onInput={inputHandler}
-        initialValue={formState.inputs.description.value}
-        initialValid={formState.inputs.description.isValid}
-      />
-      <Button type="submit" disabled={!formState.isValid}>
-        UPDATE Video
-      </Button>
-    </form>
+    <React.Fragment>
+      <ErrorModal error={error} onClear={clearError} />
+      {!isLoading && loadedVideo && (
+        <form className="video-form" onSubmit={videoUpdateSubmitHandler}>
+          <Input
+            id="title"
+            element="input"
+            type="text"
+            label="Title"
+            validators={[VALIDATOR_REQUIRE()]}
+            errorText="Please enter a valid title"
+            onInput={inputHandler}
+            initialValue={loadedVideo.title}
+            initialValid={true}
+          />
+          <Input
+            id="description"
+            element="textarea"
+            label="Description"
+            validators={[VALIDATOR_MINLENGTH(5)]}
+            errorText="Please enter a valid description (min. 5 characters)."
+            onInput={inputHandler}
+            initialValue={loadedVideo.description}
+            initialValid={true}
+          />
+          <Button type="submit" disabled={!formState.isValid}>
+            UPDATE Video
+          </Button>
+        </form>
+      )}
+    </React.Fragment>
   );
 };
 

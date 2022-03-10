@@ -19,7 +19,6 @@ const UserVideo = () => {
         const responseData = await sendRequest(
           `http://localhost:5069/api/videos/user/${userId}`
         );
-        console.log('responseData', responseData);
         const { name, imageUrl } = responseData;
         setUserInfo({ name, imageUrl });
         setUserLoadedVideos(responseData.userVideos);

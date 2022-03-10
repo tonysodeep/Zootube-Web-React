@@ -29,7 +29,6 @@ const UserVideoItem = (props) => {
 
   const confirmDeleteHandler = () => {
     setShowConfirmModal(false);
-    console.log('deling');
   };
   return (
     <React.Fragment>
