@@ -27,6 +27,12 @@ const UserVideo = () => {
     fetchUserVideos();
   }, [sendRequest, userId]);
 
+  const videoDeletedHandler = (deletedVideoId) => {
+    setUserLoadedVideos((prevVideos) =>
+      prevVideos.filter((video) => video.id !== deletedVideoId)
+    );
+  };
+
   return (
     <React.Fragment>
       <ErrorModal error={error} onClear={clearError} />
@@ -36,7 +42,11 @@ const UserVideo = () => {
         </div>
       )}
       {!isLoading && userLoadedVideos && userInfo && (
-        <UserVideoList items={userLoadedVideos} userInfo={userInfo} />
+        <UserVideoList
+          items={userLoadedVideos}
+          userInfo={userInfo}
+          onDeleteVideo={videoDeletedHandler}
+        />
       )}
     </React.Fragment>
   );

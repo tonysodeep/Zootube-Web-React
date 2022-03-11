@@ -3,12 +3,16 @@ import React, { useContext, useState } from 'react';
 import Card from '../../shared/components/UIElements/Card';
 import Button from '../../shared/components/FormElements/Button';
 import Modal from '../../shared/components/UIElements/Modal';
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import VideoPlayer from '../../shared/components/UIElements/VideoPlayer';
-import './VideoItem.css';
 import { AuthContext } from '../../shared/context/auth-context';
-
+import { useHttpClient } from '../../shared/hooks/http-hook';
+import './VideoItem.css';
 
 const UserVideoItem = (props) => {
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
   const auth = useContext(AuthContext);
 
   const [showVideo, setShowVideo] = useState(false);
@@ -27,11 +31,19 @@ const UserVideoItem = (props) => {
     setShowConfirmModal(false);
   };
 
-  const confirmDeleteHandler = () => {
+  const confirmDeleteHandler = async () => {
+    try {
+      await sendRequest(
+        `http://localhost:5069/api/videos/${props.id}`,
+        'DELETE'
+      );
+      props.onDelete(props.id);
+    } catch (err) {}
     setShowConfirmModal(false);
   };
   return (
     <React.Fragment>
+      <ErrorModal error={error} onClear={clearError} />
       <Modal
         show={showVideo}
         onCancel={closeVideoHandler}
@@ -64,6 +76,7 @@ const UserVideoItem = (props) => {
       </Modal>
       <li className="video-item">
         <Card className="video-item__content">
+          {isLoading && <LoadingSpinner asOverlay />}
           <div className="video-item__image">
             <img src={props.image} alt={props.title} />
           </div>

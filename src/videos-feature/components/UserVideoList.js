@@ -43,6 +43,7 @@ const UserVideoList = (props) => {
             video={video.resource.videoUrl}
             description={video.description}
             creatorId={video.creator}
+            onDelete={props.onDeleteVideo}
           />
         ))}
       </ul>
