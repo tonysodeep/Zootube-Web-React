@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 
 import Button from '../../shared/components/FormElements/Button';
+import ImageUpload from '../../shared/components/FormElements/ImageUpload';
 import Input from '../../shared/components/FormElements/Input';
 import Card from '../../shared/components/UIElements/Card';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
@@ -39,6 +40,8 @@ const Auth = () => {
 
   const authSubmitHandler = async (event) => {
     event.preventDefault();
+
+    console.log(formState.inputs);
 
     if (isLoginMode) {
       try {
@@ -80,6 +83,7 @@ const Auth = () => {
         {
           ...formState.inputs,
           username: undefined,
+          image: undefined,
         },
         formState.inputs.email.isValid && formState.inputs.password.isValid
       );
@@ -89,6 +93,10 @@ const Auth = () => {
           ...formState.inputs,
           username: {
             value: '',
+            isValid: false,
+          },
+          image: {
+            value: null,
             isValid: false,
           },
         },
@@ -117,6 +125,9 @@ const Auth = () => {
               onInput={inputHandler}
             />
           )}
+          {!isLoginMode && (
+            <ImageUpload center id="image" onInput={inputHandler} />
+          )}
           <Input
             id="email"
             element="input"
@@ -131,8 +142,8 @@ const Auth = () => {
             element="input"
             label="Password"
             type="password"
-            validators={[VALIDATOR_MINLENGTH(5)]}
-            errorText="Please enter valid password at least 5 characters."
+            validators={[VALIDATOR_MINLENGTH(6)]}
+            errorText="Please enter valid password at least 6 characters."
             onInput={inputHandler}
           />
 
