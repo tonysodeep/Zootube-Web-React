@@ -78,7 +78,10 @@ const UserVideoItem = (props) => {
         <Card className="video-item__content">
           {isLoading && <LoadingSpinner asOverlay />}
           <div className="video-item__image">
-            <img src={props.image} alt={props.title} />
+            <img
+              src={`http://localhost:5069/${props.image}`}
+              alt={props.title}
+            />
           </div>
           <div className="video-item__info">
             <h2>{props.title}</h2>

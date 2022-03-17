@@ -68,7 +68,7 @@ const Auth = () => {
         const responseData = await sendRequest(
           'http://localhost:5069/api/users/signup',
           'POST',
-          formData 
+          formData
         );
         auth.login(responseData.user.id);
       } catch (err) {}
@@ -124,7 +124,12 @@ const Auth = () => {
             />
           )}
           {!isLoginMode && (
-            <ImageUpload center id="image" onInput={inputHandler} />
+            <ImageUpload
+              center
+              id="image"
+              onInput={inputHandler}
+              errorText="Please provide an image"
+            />
           )}
           <Input
             id="email"

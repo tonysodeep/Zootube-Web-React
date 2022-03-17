@@ -10,10 +10,11 @@ import {
 } from '../../shared/utils/validators';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { AuthContext } from '../../shared/context/auth-context';
-
-import './VideoForm.css';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
+import ImageUpload from '../../shared/components/FormElements/ImageUpload';
+
+import './VideoForm.css';
 
 const NewVideo = () => {
   const auth = useContext(AuthContext);
@@ -29,6 +30,10 @@ const NewVideo = () => {
         value: '',
         isValid: false,
       },
+      image: {
+        value: null,
+        isValid: false,
+      },
     },
     false
   );
@@ -38,18 +43,12 @@ const NewVideo = () => {
   const videoSubmitHandler = async (event) => {
     event.preventDefault();
     try {
-      await sendRequest(
-        'http://localhost:5069/api/videos/',
-        'POST',
-        JSON.stringify({
-          title: formState.inputs.title.value,
-          description: formState.inputs.description.value,
-          creator: auth.userId,
-        }),
-        {
-          'Content-Type': 'application/json',
-        }
-      );
+      const formData = new FormData();
+      formData.append('title', formState.inputs.title.value);
+      formData.append('description', formState.inputs.description.value);
+      formData.append('creator', auth.userId);
+      formData.append('image', formState.inputs.image.value);
+      await sendRequest('http://localhost:5069/api/videos/', 'POST', formData);
       //Redirect the user to differte page
       history.push('/');
     } catch (error) {}
@@ -67,6 +66,12 @@ const NewVideo = () => {
           validators={[VALIDATOR_REQUIRE()]}
           errorText="Please enter valid title"
           onInput={inputHandler}
+        />
+        <ImageUpload
+          center
+          id="image"
+          onInput={inputHandler}
+          errorText="Please provide an image"
         />
         <Input
           id="description"
