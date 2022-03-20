@@ -79,7 +79,7 @@ const UserVideoItem = (props) => {
           {isLoading && <LoadingSpinner asOverlay />}
           <div className="video-item__image">
             <img
-              src={`http://localhost:5069/${props.image}`}
+              src={`${props.image}`}
               alt={props.title}
             />
           </div>

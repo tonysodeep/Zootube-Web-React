@@ -14,7 +14,7 @@ const UserVideoList = (props) => {
         <Card className="user-item__content">
           <div className="user-item__image">
             <Avatar
-              image={`http://localhost:5069/${props.userInfo.imageUrl}`}
+              image={`${props.userInfo.imageUrl}`}
               alt={props.userInfo.name}
             />
           </div>
