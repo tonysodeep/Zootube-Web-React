@@ -23,9 +23,7 @@ const App = () => {
 
   const login = useCallback((uid, token) => {
     setToken(token);
-    console.log('token', token);
     setUserId(uid);
-    console.log(uid);
   }, []);
 
   const logout = useCallback(() => {

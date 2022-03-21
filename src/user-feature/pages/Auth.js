@@ -41,8 +41,6 @@ const Auth = () => {
   const authSubmitHandler = async (event) => {
     event.preventDefault();
 
-    console.log(formState.inputs);
-
     if (isLoginMode) {
       try {
         const responseData = await sendRequest(
@@ -54,7 +52,7 @@ const Auth = () => {
           }),
           {
             'Content-Type': 'application/json',
-          },
+          }
         );
         auth.login(responseData.userId, responseData.token);
       } catch (err) {}

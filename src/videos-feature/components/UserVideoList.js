@@ -9,7 +9,6 @@ import './VideoList.css';
 
 const UserVideoList = (props) => {
   if (props.items.length === 0) {
-    console.log(props.userInfo.imageUrl);
     return (
       <React.Fragment>
         <Card className="user-item__content">

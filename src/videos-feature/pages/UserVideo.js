@@ -29,9 +29,7 @@ const UserVideo = () => {
         const { name, imageUrl } = responseData;
         setUserInfo({ name, imageUrl });
         setUserLoadedVideos(responseData.userVideos);
-      } catch (err) {
-        console.log(err);
-      }
+      } catch (err) {}
     };
     fetchUserVideos();
   }, [auth.token, sendRequest, userId]);
