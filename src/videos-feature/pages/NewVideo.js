@@ -15,6 +15,7 @@ import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import ImageUpload from '../../shared/components/FormElements/ImageUpload';
 
 import './VideoForm.css';
+import VideoUpload from '../../shared/components/FormElements/VideoUpload';
 
 const NewVideo = () => {
   const auth = useContext(AuthContext);
@@ -34,6 +35,10 @@ const NewVideo = () => {
         value: null,
         isValid: false,
       },
+      video: {
+        value: null,
+        isValid: false,
+      },
     },
     false
   );
@@ -41,6 +46,7 @@ const NewVideo = () => {
   const history = useHistory();
 
   const videoSubmitHandler = async (event) => {
+    console.log(formState);
     event.preventDefault();
     try {
       const formData = new FormData();
@@ -48,6 +54,7 @@ const NewVideo = () => {
       formData.append('description', formState.inputs.description.value);
       formData.append('creator', auth.userId);
       formData.append('image', formState.inputs.image.value);
+      formData.append('video', formState.inputs.video.value);
       await sendRequest('http://localhost:5069/api/videos/', 'POST', formData, {
         Authorization: 'Bearer ' + auth.token,
       });
@@ -82,6 +89,12 @@ const NewVideo = () => {
           validators={[VALIDATOR_MINLENGTH(5)]}
           errorText="Please enter valid description (at least 5 char)"
           onInput={inputHandler}
+        />
+        <VideoUpload
+          center
+          id="video"
+          onInput={inputHandler}
+          errorText="Please provide a video"
         />
         <Button type="submit" disabled={!formState.isValid}>
           ADD VIDEO
