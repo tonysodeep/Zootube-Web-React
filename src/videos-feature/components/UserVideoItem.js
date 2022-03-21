@@ -35,7 +35,11 @@ const UserVideoItem = (props) => {
     try {
       await sendRequest(
         `http://localhost:5069/api/videos/${props.id}`,
-        'DELETE'
+        'DELETE',
+        null,
+        {
+          Authorization: 'Bearer ' + auth.token,
+        }
       );
       props.onDelete(props.id);
     } catch (err) {}
@@ -78,10 +82,7 @@ const UserVideoItem = (props) => {
         <Card className="video-item__content">
           {isLoading && <LoadingSpinner asOverlay />}
           <div className="video-item__image">
-            <img
-              src={`${props.image}`}
-              alt={props.title}
-            />
+            <img src={`${props.image}`} alt={props.title} />
           </div>
           <div className="video-item__info">
             <h2>{props.title}</h2>

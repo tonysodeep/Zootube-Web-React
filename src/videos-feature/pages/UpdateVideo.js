@@ -80,6 +80,7 @@ const UpdateVideo = () => {
         }),
         {
           'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + auth.token,
         }
       );
       history.push(`/videos/${auth.userId}`);

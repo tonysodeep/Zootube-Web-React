@@ -19,7 +19,6 @@ const NavLinks = (props) => {
           <NavLink to={`/videos/${auth.userId}`}>MY VIDEO</NavLink>
         </li>
       )}
-
       {auth.isLoggedIn && (
         <li>
           <NavLink to="/video/new">ADD VIDEO</NavLink>

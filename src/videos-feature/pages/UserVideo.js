@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
+import { AuthContext } from '../../shared/context/auth-context';
 
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import UserVideoList from '../components/UserVideoList';
 
 const UserVideo = () => {
+  const auth = useContext(AuthContext);
   const [userLoadedVideos, setUserLoadedVideos] = useState();
   const [userInfo, setUserInfo] = useState();
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -17,15 +19,22 @@ const UserVideo = () => {
     const fetchUserVideos = async () => {
       try {
         const responseData = await sendRequest(
-          `http://localhost:5069/api/videos/user/${userId}`
+          `http://localhost:5069/api/videos/user/${userId}`,
+          'GET',
+          null,
+          {
+            Authorization: 'Bearer ' + auth.token,
+          }
         );
         const { name, imageUrl } = responseData;
         setUserInfo({ name, imageUrl });
         setUserLoadedVideos(responseData.userVideos);
-      } catch (err) {}
+      } catch (err) {
+        console.log(err);
+      }
     };
     fetchUserVideos();
-  }, [sendRequest, userId]);
+  }, [auth.token, sendRequest, userId]);
 
   const videoDeletedHandler = (deletedVideoId) => {
     setUserLoadedVideos((prevVideos) =>

@@ -48,7 +48,9 @@ const NewVideo = () => {
       formData.append('description', formState.inputs.description.value);
       formData.append('creator', auth.userId);
       formData.append('image', formState.inputs.image.value);
-      await sendRequest('http://localhost:5069/api/videos/', 'POST', formData);
+      await sendRequest('http://localhost:5069/api/videos/', 'POST', formData, {
+        Authorization: 'Bearer ' + auth.token,
+      });
       //Redirect the user to differte page
       history.push('/');
     } catch (error) {}
