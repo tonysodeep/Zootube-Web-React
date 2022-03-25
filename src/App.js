@@ -4,7 +4,6 @@ import {
   Redirect,
   Switch,
 } from 'react-router-dom';
-import { useCallback, useState } from 'react';
 
 import NewVideo from './videos-feature/pages/NewVideo';
 import Videos from './videos-feature/pages/Videos';
@@ -15,22 +14,12 @@ import Auth from './user-feature/pages/Auth';
 import { AuthContext } from './shared/context/auth-context';
 
 import './App.css';
+import { useAuth } from './shared/hooks/auth-hook';
 
 const App = () => {
-  const [token, setToken] = useState(false);
-
-  const [userId, setUserId] = useState(false);
-
-  const login = useCallback((uid, token) => {
-    setToken(token);
-    setUserId(uid);
-  }, []);
-
-  const logout = useCallback(() => {
-    setToken(null);
-    setUserId(null);
-  }, []);
+  const { token, login, logout, userId } = useAuth();
   let routes;
+
   if (token) {
     routes = (
       <Switch>

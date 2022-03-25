@@ -5,6 +5,7 @@ import Input from '../../shared/components/FormElements/Input';
 import Button from '../../shared/components/FormElements/Button';
 import { useForm } from '../../shared/hooks/form-hook';
 import {
+  VALIDATOR_FILE,
   VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
 } from '../../shared/utils/validators';
@@ -80,6 +81,7 @@ const NewVideo = () => {
           center
           id="image"
           onInput={inputHandler}
+          validators={[VALIDATOR_FILE()]}
           errorText="Please provide an image"
         />
         <Input
@@ -94,6 +96,7 @@ const NewVideo = () => {
           center
           id="video"
           onInput={inputHandler}
+          validators={[VALIDATOR_FILE()]}
           errorText="Please provide a video"
         />
         <Button type="submit" disabled={!formState.isValid}>

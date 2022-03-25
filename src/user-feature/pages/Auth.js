@@ -11,6 +11,7 @@ import { useForm } from '../../shared/hooks/form-hook';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import {
   VALIDATOR_EMAIL,
+  VALIDATOR_FILE,
   VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
 } from '../../shared/utils/validators';
@@ -125,6 +126,7 @@ const Auth = () => {
             <ImageUpload
               center
               id="image"
+              validators={[VALIDATOR_FILE()]}
               onInput={inputHandler}
               errorText="Please provide an image"
             />
