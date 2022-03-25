@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 let logoutTimer;
 
@@ -11,7 +11,7 @@ export const useAuth = () => {
     setToken(token);
     setUserId(uid);
     const tokenExpirationDate =
-      expirationDate || new Date(new Date().getTime + 1000 * 60 * 60);
+      expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60);
     setTokenExpirationDate(tokenExpirationDate);
     localStorage.setItem(
       'userData',
